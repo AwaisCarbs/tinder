@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/tindercard.css";
 import TinderCard from "react-tinder-card";
+import axios from "../axios";
 function TinderrCard() {
   const swiped = (direction, nameToDelete) => {
     console.log("removing: " + nameToDelete);
@@ -9,18 +10,15 @@ function TinderrCard() {
   const outOfFrame = (name) => {
     console.log(name + " left the screen");
   };
-  const [people, setPeople] = useState([
-    {
-      name: "Elon",
-      imgUrl:
-        "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQU2JRbbl3LBOm_an3eI5iplFhOoLESyBwUfmWDO49BS1EYuGUE",
-    },
-    {
-      name: "Jeff",
-      imgUrl:
-        "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY2NzA3ODE3OTgwMzcyMjYw/jeff-bezos-andrew-harrer_bloomberg-via-getty-images.jpg",
-    },
-  ]);
+  const [people, setPeople] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const req = await axios.get("/tinder/cards");
+      setPeople(req.data);
+    }
+    fetchData();
+  }, []);
+  console.log(people);
   return (
     <div className="tinderCards">
       <div className="tinderCards__cardContainer">
